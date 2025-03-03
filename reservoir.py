@@ -19,12 +19,18 @@ def rsample(stream, size=10):
             reservoir.append(item)
             if num_observations == size-1:
                 shuffle(reservoir)
+    if len(reservoir) < size:
+        shuffle(reservoir)
     return reservoir
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-n", "--sample-size", help = "Size of the sample to be taken")
     args = parser.parse_args()
+
+    if sys.stdin.isatty():
+        print("Error: No input from stdin")
+        exit(1)
 
     if args.sample_size:
         res = rsample(sys.stdin,int(args.sample_size))
